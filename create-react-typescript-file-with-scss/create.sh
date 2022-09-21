@@ -59,7 +59,7 @@ fi
 
 if ! [[ $1 =~ ^[a-zA-Z/]+$ ]]
     then
-        echo "Your module name should contain only alphabets (no numbers or spaces)."
+        echo "Your module name should contain only alphabets with optional / (no numbers or spaces)."
         exit 1
 fi
 
