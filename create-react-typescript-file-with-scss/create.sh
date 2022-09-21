@@ -32,7 +32,7 @@ export default %s;
 " "$scss_file_name" "$directory_name" "$directory_name" "$directory_name"
 );
 
-echo "$content" | cat > "$tsx_file_name";
+echo "$content" | cat > "${directory_path}/${tsx_file_name}";
 }
 
 get_directory_name () {
@@ -81,9 +81,8 @@ set -e
 
 (  
     mkdir -p "$directory_path" || exit_with_message "Couldn't create directory!";
-    cd "$directory_path" || exit_with_message "Couldn't traverse into directory!";
-    touch "$tsx_file_name" || exit_with_message "Couldn't create tsx file!";
-    touch "$scss_file_name" || exit_with_message "Couldn't create scss file!";
+    touch "${directory_path}/${tsx_file_name}" || exit_with_message "Couldn't create tsx file!";
+    touch "${directory_path}/${scss_file_name}" || exit_with_message "Couldn't create scss file!";
     get_tsx_content || exit_with_message "Couldn't append to content!";
 )
 
