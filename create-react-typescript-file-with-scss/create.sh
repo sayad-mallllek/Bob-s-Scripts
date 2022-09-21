@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Globals
+
+trap "exit 1" ERR
+export TOP_PID=$$
+
 # Functions
 
 exit_with_message () {
@@ -37,6 +42,13 @@ get_directory_name () {
     echo $name;
 }
 
+get_directory_path_before () {
+    regex='(.*/|^)(.*)'
+    [[ $1 =~ $regex ]]
+    name="${BASH_REMATCH[1]}"
+    echo $name;
+}
+
 # Initial Validations
 
 if [ -z "$1" ]
@@ -55,9 +67,9 @@ fi
 
 path_prefix="./"
 
-directory_path="${path_prefix}${1}";
-directory_name="$(get_directory_name)"
-scss_prefix=${1,}
+directory_name="$(get_directory_name $1)"
+directory_path="${path_prefix}$(get_directory_path_before $1)${directory_name^}";
+scss_prefix=${directory_name,}
 tsx_file_name="index.tsx";
 scss_file_name="$scss_prefix.module.scss"
 
@@ -65,14 +77,17 @@ scss_file_name="$scss_prefix.module.scss"
 
 # Creating folder and files in a transaction
 
-( set -e 
-    mkdir "$directory_path" || exit_with_message "Couldn't create directory!";
+set -e
+
+(  
+    mkdir -p "$directory_path" || exit_with_message "Couldn't create directory!";
     cd "$directory_path" || exit_with_message "Couldn't traverse into directory!";
     touch "$tsx_file_name" || exit_with_message "Couldn't create tsx file!";
     touch "$scss_file_name" || exit_with_message "Couldn't create scss file!";
+    get_tsx_content || exit_with_message "Couldn't append to content!";
 )
 
 
 # Appending content to folder
 
-get_tsx_content
+echo "Done!";
