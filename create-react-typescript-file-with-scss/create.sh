@@ -32,7 +32,7 @@ export default %s;
 " "$scss_file_name" "$directory_name" "$directory_name" "$directory_name"
 );
 
-echo "$content" | cat > "${directory_path}/${tsx_file_name}";
+printf "%s" "$content" | cat > "${directory_path}/${tsx_file_name}";
 }
 
 get_directory_name () {
