@@ -28,7 +28,7 @@ printf "%s" "$content" | cat > "${service_and_module_directory_path}/${component
 get_module_content () {
     content=$(
 printf "import { Module } from \"@nestjs/common\";
-import { %sService } from './%s.service\";
+import { %sService } from \"./%s.service\";
 
 @Module({
     imports:[],
