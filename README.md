@@ -6,4 +6,7 @@ Scripts that automate creation of react and nest components/modules
 
 Inside each folder there is a README.md that explains how to use each script
 
-## Result
+## Activation
+
+Activate script so you can use them anywhere by running the following command:<br />
+`bash activate.sh`
