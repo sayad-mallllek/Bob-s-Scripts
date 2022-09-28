@@ -33,6 +33,10 @@ if [ ! -z $folder_name ]; then
      full_route="${api_route_prefix}${folder_name}/${file_name}"
 fi
 
+full_pathname="${full_route}/${file_name}.ts"
+
+mkdir -p "$full_route";
+touch "$full_pathname";
 # echo "Username: $username";
 # echo "Age: $age";
 # echo "Full Name: $fullname";
