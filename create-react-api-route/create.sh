@@ -56,6 +56,9 @@ while getopts ":m:f:h" flag; do
     esac
 done
 
+file_name=$1
+api_route=$2
+
 full_route="${api_route_prefix}${file_name}"
 
 if [ ! -z $folder_name ]; then
