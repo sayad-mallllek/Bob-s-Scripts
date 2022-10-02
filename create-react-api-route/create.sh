@@ -6,10 +6,26 @@ api_route="/"
 folder_name=""
 file_name=""
 api_method="get"
+input_params=""
 
 # Functions
 get_help() {
     printf "react_api_create allows you to create your react api route\n"
+}
+
+get_api_file_content() {
+    content=$(printf "import { sendRequest } from \".%s/axios\";
+
+export const checkAvailability = async (%s) => {
+  const res = await sendRequest<unknown, unknown>({
+    method: \"%s\",
+    url: \`%s\`,
+  });
+  return res.data;
+};
+" "$( if [[ -n $folder_name ]]; then printf "%s" "."; fi )" "$input_params" "$api_method" "$api_route")
+
+printf "%s" "$content" | cat > "${full_pathname}";
 }
 
 # Flags assignment
@@ -25,8 +41,8 @@ done
 
 # Validations
 
-if [ ! $# -eq 2 ]; then
-    printf "%d arguments were provided\nYou need to specify 2 arguments [file_name] [api_route]\n" "$#"
+if [ $# -lt 2 ]; then
+    printf "%d arguments were provided\nYou need to specify atleast 2 arguments [file_name] [api_route]\n" "$#"
     exit 1
 fi
 
@@ -42,15 +58,13 @@ fi
 
 # Script Execution
 
-while getopts ":m:f:h" flag; do
+while getopts ":m:f:i" flag; do
     case "$flag" in
     m) api_method=${OPTARG} ;;
     f) folder_name=${OPTARG} ;;
-    h) get_help
-        exit 0
-        ;;
+    i) input_params="input unknown" ;;
     \?)
-        printf "flag: ${OPTARG} is not a valid flag\n"
+        printf "flag: %s is not a valid flag\n" "${OPTARG}"
         exit 1
         ;;
     esac
@@ -61,7 +75,8 @@ api_route=$2
 
 full_route="${api_route_prefix}${file_name}"
 
-if [ ! -z $folder_name ]; then
+if [ -n "$folder_name" ]; then
+    echo "I entered here!"
     full_route="${api_route_prefix}${folder_name}/${file_name}"
 fi
 
@@ -69,6 +84,9 @@ full_pathname="${full_route}/${file_name}.ts"
 
 mkdir -p "$full_route"
 touch "$full_pathname"
+get_api_file_content
+
+
 # # echo "Username: $username";
 # # echo "Age: $age";
 # # echo "Full Name: $fullname";
